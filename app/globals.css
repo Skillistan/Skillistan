@@ -1,0 +1,96 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-space-grotesk), 'Space Grotesk Fallback', sans-serif;
+  --font-sans: var(--font-geist-sans), 'Geist Fallback', sans-serif;
+  --font-mono: var(--font-geist-mono), 'Geist Mono Fallback', monospace;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  color-scheme: light;
+  /* Warm paper white */
+  --background: oklch(0.982 0.004 106.4);
+  /* Deep charcoal ink from the logo mark */
+  --foreground: oklch(0.268 0.012 155.5);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.268 0.012 155.5);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.268 0.012 155.5);
+  /* Skillistan green */
+  --primary: oklch(0.627 0.17 145.4);
+  --primary-foreground: oklch(0.985 0.004 106.4);
+  --secondary: oklch(0.945 0.006 106.4);
+  --secondary-foreground: oklch(0.268 0.012 155.5);
+  --muted: oklch(0.945 0.006 106.4);
+  --muted-foreground: oklch(0.52 0.012 155.5);
+  --accent: oklch(0.627 0.17 145.4);
+  --accent-foreground: oklch(0.985 0.004 106.4);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.885 0.006 106.4);
+  --input: oklch(0.885 0.006 106.4);
+  --ring: oklch(0.627 0.17 145.4);
+  /* Dark editorial sections */
+  --ink: oklch(0.235 0.012 155.5);
+  --ink-foreground: oklch(0.965 0.004 106.4);
+  --radius: 0.25rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
