@@ -28,7 +28,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2.5" aria-label="Skillistan home">
           <Image
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt=""
             width={36}
             height={34}
