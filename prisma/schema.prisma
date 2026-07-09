@@ -1,0 +1,132 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Admin Users
+model AdminUser {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_users")
+}
+
+// 2. Team Members / Internees / Employees
+model TeamMember {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  category  String   // e.g. "leadership", "employee", "intern", "volunteer"
+  bio       String?  @db.Text
+  imageUrl  String?  @map("image_url")
+  order     Int      @default(0) // custom sorting index
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("team_members")
+}
+
+// 3. Dynamic Programs
+model Program {
+  id          String   @id @default(uuid())
+  number      String   // e.g. "01", "02"
+  title       String
+  description String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("programs")
+}
+
+// 4. Events
+model Event {
+  id                  String              @id @default(uuid())
+  title               String
+  slug                String              @unique
+  description         String              @default("") @db.Text
+  eventDate           DateTime            @map("event_date")
+  location            String              @default("")
+  imageUrl            String?             @map("image_url")
+  registrationEnabled Boolean             @default(false) @map("registration_enabled")
+  status              String              @default("draft") // "draft" | "published" | "archived"
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
+  registrations       EventRegistration[]
+
+  @@map("events")
+}
+
+// 5. Event Registrations (Public submissions)
+model EventRegistration {
+  id        String   @id @default(uuid())
+  eventId   String   @map("event_id")
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  email     String
+  mobile    String
+  message   String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, email])
+  @@map("event_registrations")
+}
+
+// 6. Stories / Blog posts
+model Story {
+  id               String    @id @default(uuid())
+  title            String
+  slug             String    @unique
+  excerpt          String    @default("") @db.Text
+  content          String    @db.Text // Will store markdown content
+  featuredImageUrl String?   @map("featured_image_url")
+  status           String    @default("draft") // "draft" | "published" | "archived"
+  publishedAt      DateTime? @map("published_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@map("stories")
+}
+
+// 7. Contact Inquiries (Public submissions)
+model ContactMessage {
+  id        String   @id @default(uuid())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  email     String
+  mobile    String
+  message   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_messages")
+}
+
+// 8. Volunteer Applications (Public submissions)
+model VolunteerApplication {
+  id        String   @id @default(uuid())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  email     String
+  mobile    String
+  message   String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("volunteer_applications")
+}
+
+// 9. Newsletter Subscribers (Public submissions)
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("newsletter_subscribers")
+}
