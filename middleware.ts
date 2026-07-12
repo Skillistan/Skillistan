@@ -1,0 +1,53 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { verifyJWT } from "./lib/auth";
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Protect secret admin routes
+  if (pathname.startsWith("/skillistanadminventures")) {
+    
+    // Bypass auth check for the login page
+    if (pathname === "/skillistanadminventures/login") {
+      const token = request.cookies.get("skillistan_session")?.value;
+      if (token) {
+        const payload = await verifyJWT(token);
+        if (payload) {
+          // Admin is already logged in, send them to the dashboard
+          return NextResponse.redirect(new URL("/skillistanadminventures", request.url));
+        }
+      }
+      return NextResponse.next();
+    }
+
+    // For all other admin pages, verify the session
+    const token = request.cookies.get("skillistan_session")?.value;
+
+    if (!token) {
+      return NextResponse.redirect(
+        new URL("/skillistanadminventures/login", request.url)
+      );
+    }
+
+    const payload = await verifyJWT(token);
+
+    if (!payload) {
+      // Invalid/expired session cookie, redirect to login page and clear cookie
+      const response = NextResponse.redirect(
+        new URL("/skillistanadminventures/login", request.url)
+      );
+      response.cookies.delete("skillistan_session");
+      return response;
+    }
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    // Protect all pages except standard asset folders and api calls
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};

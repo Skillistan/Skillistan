@@ -1,8 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google'
-import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
+import { LayoutWrapper } from '@/components/layout-wrapper'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -52,9 +51,7 @@ export default function RootLayout({
       className={`bg-background ${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable}`}
     >
       <body className="font-sans antialiased">
-        <SiteHeader />
-        <main id="main">{children}</main>
-        <SiteFooter />
+        <LayoutWrapper>{children}</LayoutWrapper>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
