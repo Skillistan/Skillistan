@@ -5,7 +5,27 @@ import { verifyJWT } from "./lib/auth";
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect secret admin routes
+  // Protect admin API endpoints
+  if (pathname.startsWith("/api/admin")) {
+    // Bypass auth routes (login / logout)
+    if (pathname.startsWith("/api/admin/auth")) {
+      return NextResponse.next();
+    }
+
+    const token = request.cookies.get("skillistan_session")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    const payload = await verifyJWT(token);
+    if (!payload) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    return NextResponse.next();
+  }
+
+  // Protect secret admin UI pages
   if (pathname.startsWith("/skillistanadminventures")) {
     
     // Bypass auth check for the login page
@@ -47,7 +67,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Protect all pages except standard asset folders and api calls
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/skillistanadminventures/:path*",
+    "/api/admin/:path*",
   ],
 };
