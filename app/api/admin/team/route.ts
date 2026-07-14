@@ -18,7 +18,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { name, role, category, bio, imageUrl, order } = await request.json();
+    const { name, role, category, bio, imageUrl, linkedinUrl, order } = await request.json();
 
     if (!name || !role || !category) {
       return NextResponse.json(
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         category,
         bio,
         imageUrl,
+        linkedinUrl: linkedinUrl || null,
         order: typeof order === "number" ? order : 0,
       },
     });

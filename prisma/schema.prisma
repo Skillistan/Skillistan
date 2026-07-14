@@ -20,15 +20,16 @@ model AdminUser {
 
 // 2. Team Members / Internees / Employees
 model TeamMember {
-  id        String   @id @default(uuid())
-  name      String
-  role      String
-  category  String   // e.g. "leadership", "employee", "intern", "volunteer"
-  bio       String?  @db.Text
-  imageUrl  String?  @map("image_url")
-  order     Int      @default(0) // custom sorting index
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id          String   @id @default(uuid())
+  name        String
+  role        String
+  category    String   // e.g. "leadership", "employee", "intern", "volunteer"
+  bio         String?  @db.Text
+  imageUrl    String?  @map("image_url")
+  linkedinUrl String?  @map("linkedin_url")
+  order       Int      @default(0) // custom sorting index
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("team_members")
 }
