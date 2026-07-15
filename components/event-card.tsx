@@ -39,14 +39,12 @@ export function EventCard({ event }: { event: Event }) {
         <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
           {event.description}
         </p>
-        {isOpen && (
-          <Link
-            href={`/events#register-${event.slug}`}
-            className="mt-4 inline-flex w-fit bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-primary hover:text-primary-foreground"
-          >
-            Register now
-          </Link>
-        )}
+        <Link
+          href={`/events/${event.slug}`}
+          className="mt-4 inline-flex w-fit bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-primary hover:text-primary-foreground"
+        >
+          {isOpen ? 'Register now' : 'View details'}
+        </Link>
       </div>
     </article>
   )

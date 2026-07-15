@@ -102,6 +102,72 @@ async function main() {
     }
   }
 
+  // 3. Seed Sample Events
+  console.log("Seeding sample events...");
+  
+  // Future date (30 days from now)
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 30);
+  
+  // Past date (60 days ago)
+  const pastDate = new Date();
+  pastDate.setDate(pastDate.getDate() - 60);
+
+  const futureDateString = futureDate.toISOString().split("T")[0];
+  const pastDateString = pastDate.toISOString().split("T")[0];
+
+  const sampleEvents = [
+    {
+      title: "Digital Freelancing Bootcamp",
+      slug: `digital-freelancing-bootcamp-${futureDateString}`,
+      description: "A comprehensive hands-on program covering graphic design, content writing, and Upwork/Fiverr profile optimization. Learn how to secure your first client and build a sustainable online career.",
+      eventDate: futureDate,
+      location: "Peshawar University IT Center",
+      imageUrl: null,
+      registrationEnabled: true,
+      status: "published",
+    },
+    {
+      title: "Youth Climate & Sustainability Conference",
+      slug: `youth-climate-conference-${pastDateString}`,
+      description: "Gathering youth advocates, climate experts, and policy makers to discuss local action plans, waste management, and renewable energy strategies in Khyber Pakhtunkhwa.",
+      eventDate: pastDate,
+      location: "KP Youth Assembly Hall, Peshawar",
+      imageUrl: null,
+      registrationEnabled: false,
+      status: "published",
+    },
+    {
+      title: "Advanced React & Next.js Workshop",
+      slug: `advanced-react-nextjs-workshop-${futureDateString}`,
+      description: "Dive deep into dynamic routing, Server Components, database connections, and hosting web applications. Perfect for CS students and developers looking to level up.",
+      eventDate: futureDate,
+      location: "Online (Zoom)",
+      imageUrl: null,
+      registrationEnabled: false,
+      status: "published",
+    },
+  ];
+
+  for (const event of sampleEvents) {
+    const existing = await prisma.event.findUnique({
+      where: { slug: event.slug },
+    });
+
+    if (!existing) {
+      await prisma.event.create({
+        data: event,
+      });
+      console.log(`Created sample event: ${event.title} (slug: ${event.slug})`);
+    } else {
+      await prisma.event.update({
+        where: { id: existing.id },
+        data: event,
+      });
+      console.log(`Updated sample event: ${event.title} (slug: ${event.slug})`);
+    }
+  }
+
   console.log("Database seeding completed successfully.");
   await pool.end();
 }

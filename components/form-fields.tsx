@@ -1,3 +1,5 @@
+import React from 'react'
+
 const inputClasses =
   'w-full border border-input bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary'
 
@@ -8,6 +10,8 @@ export function TextField({
   required = false,
   placeholder,
   autoComplete,
+  value,
+  onChange,
 }: {
   id: string
   label: string
@@ -15,6 +19,8 @@ export function TextField({
   required?: boolean
   placeholder?: string
   autoComplete?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -33,6 +39,8 @@ export function TextField({
         required={required}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        value={value}
+        onChange={onChange}
         className={inputClasses}
       />
     </div>
@@ -45,12 +53,16 @@ export function TextAreaField({
   required = false,
   placeholder,
   rows = 4,
+  value,
+  onChange,
 }: {
   id: string
   label: string
   required?: boolean
   placeholder?: string
   rows?: number
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -68,6 +80,8 @@ export function TextAreaField({
         required={required}
         placeholder={placeholder}
         rows={rows}
+        value={value}
+        onChange={onChange}
         className={inputClasses}
       />
     </div>
