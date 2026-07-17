@@ -7,7 +7,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const { number, title, description } = await request.json();
+    const { number, title, description, imageUrl } = await request.json();
 
     if (!number || !title || !description) {
       return NextResponse.json(
@@ -22,6 +22,7 @@ export async function PUT(
         number,
         title,
         description,
+        imageUrl: imageUrl !== undefined ? imageUrl : undefined,
       },
     });
 

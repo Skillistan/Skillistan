@@ -168,6 +168,55 @@ async function main() {
     }
   }
 
+  // 4. Seed Programs
+  console.log("Seeding sample programs...");
+  const samplePrograms = [
+    {
+      number: "01",
+      title: "Youth Skills Development",
+      description: "Practical, employment-focused training that helps young people move from classrooms into real work — communication, freelancing fundamentals, and professional readiness.",
+    },
+    {
+      number: "02",
+      title: "Digital Literacy",
+      description: "Hands-on digital foundations for students and young professionals: online tools, digital safety, and the skills needed to participate in the modern economy.",
+    },
+    {
+      number: "03",
+      title: "Climate Action & Sustainability",
+      description: "From LCOY conferences to community campaigns, we put young voices at the center of climate conversations in Khyber Pakhtunkhwa and beyond.",
+    },
+    {
+      number: "04",
+      title: "Youth Leadership",
+      description: "Structured opportunities for young people to organize, speak, and lead — building the confidence and networks that turn participants into changemakers.",
+    },
+    {
+      number: "05",
+      title: "Workshops & Community Programs",
+      description: "Short, focused sessions delivered with schools, universities, and partners — designed to be accessible, local, and immediately useful.",
+    },
+  ];
+
+  for (const prog of samplePrograms) {
+    const existing = await prisma.program.findFirst({
+      where: { number: prog.number },
+    });
+
+    if (!existing) {
+      await prisma.program.create({
+        data: prog,
+      });
+      console.log(`Created sample program: ${prog.title} (${prog.number})`);
+    } else {
+      await prisma.program.update({
+        where: { id: existing.id },
+        data: prog,
+      });
+      console.log(`Updated sample program: ${prog.title} (${prog.number})`);
+    }
+  }
+
   console.log("Database seeding completed successfully.");
   await pool.end();
 }

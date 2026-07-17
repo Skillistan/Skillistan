@@ -18,7 +18,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { number, title, description } = await request.json();
+    const { number, title, description, imageUrl } = await request.json();
 
     if (!number || !title || !description) {
       return NextResponse.json(
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         number,
         title,
         description,
+        imageUrl: imageUrl || null,
       },
     });
 

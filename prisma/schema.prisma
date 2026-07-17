@@ -40,6 +40,7 @@ model Program {
   number      String   // e.g. "01", "02"
   title       String
   description String   @db.Text
+  imageUrl    String?  @map("image_url") // optional program cover photo
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

@@ -87,7 +87,8 @@ export default function AdminLayout({
             alt=""
             width={24}
             height={22}
-            className="h-6 w-auto"
+            className="h-6"
+            style={{ width: "auto" }}
           />
           <span className="font-heading font-bold text-lg text-primary">
             Skillistan Admin
@@ -112,7 +113,8 @@ export default function AdminLayout({
                 alt=""
                 width={28}
                 height={26}
-                className="h-7 w-auto"
+                className="h-7"
+                style={{ width: "auto" }}
               />
               <span className="font-heading font-bold text-lg text-primary">
                 Skillistan
