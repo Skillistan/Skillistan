@@ -57,13 +57,16 @@ export default function VolunteerPage() {
 
       <section className="mx-auto grid max-w-6xl gap-12 px-4 pb-16 md:grid-cols-2 md:px-6 md:pb-24">
         <div>
-          <h2 className="font-heading text-2xl font-bold tracking-tight">
+          <h2 className="font-heading text-2xl font-bold tracking-tight border-b border-border pb-3">
             What volunteers do
           </h2>
-          <div className="mt-6 flex flex-col gap-px bg-border">
+          <div className="mt-6 flex flex-col gap-4">
             {roles.map((role) => (
-              <div key={role.title} className="bg-background py-5">
-                <h3 className="font-heading text-lg font-bold">
+              <div
+                key={role.title}
+                className="border border-border p-4 bg-card/30 hover:bg-card hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <h3 className="font-heading text-lg font-bold text-primary">
                   {role.title}
                 </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
@@ -73,13 +76,13 @@ export default function VolunteerPage() {
             ))}
           </div>
 
-          <h2 className="mt-10 font-heading text-2xl font-bold tracking-tight">
+          <h2 className="mt-10 font-heading text-2xl font-bold tracking-tight border-b border-border pb-3">
             What we expect
           </h2>
-          <ul className="mt-5 flex flex-col gap-3">
+          <ul className="mt-6 flex flex-col gap-3">
             {expectations.map((item) => (
-              <li key={item} className="flex gap-3 text-sm leading-relaxed">
-                <span aria-hidden="true" className="mt-0.5 text-primary">
+              <li key={item} className="flex gap-3 text-sm leading-relaxed items-start">
+                <span aria-hidden="true" className="mt-0.5 text-primary font-bold">
                   ✦
                 </span>
                 <span className="text-muted-foreground">{item}</span>
@@ -87,18 +90,19 @@ export default function VolunteerPage() {
             ))}
           </ul>
 
-          <div className="relative mt-10 aspect-[16/9] overflow-hidden">
+          <div className="relative mt-12 aspect-[4/3] overflow-hidden border border-border">
             <Image
               src="/images/plant-gift.jpg"
               alt="A Skillistan guest of honor receiving a potted plant at a youth conference"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
+              className="object-cover hover:scale-105 transition-transform duration-700"
             />
           </div>
         </div>
 
-        <div className="h-fit border border-border bg-card p-6 md:sticky md:top-24 md:p-8">
+        {/* Application Form Box (Sticky) */}
+        <div className="h-fit border border-border bg-card p-6 md:sticky md:top-24 md:p-8 shadow-sm">
           <h2 className="font-heading text-2xl font-bold tracking-tight">
             Apply now
           </h2>

@@ -12,19 +12,19 @@ const contactDetails = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'hello@skillistan.org',
-    href: 'mailto:hello@skillistan.org',
+    value: 'contact@skillistan.org',
+    href: 'mailto:contact@skillistan.org',
   },
   {
     icon: Phone,
     label: 'Phone',
-    value: '+92 300 0000000',
-    href: 'tel:+923000000000',
+    value: '+92 333 4835523',
+    href: 'tel:+923334835523',
   },
   {
     icon: MapPin,
     label: 'Location',
-    value: 'Peshawar, Khyber Pakhtunkhwa, Pakistan',
+    value: 'Bahria Town Phase 4, Islamabad, Pakistan',
     href: null,
   },
 ]
@@ -44,10 +44,14 @@ export default function ContactPage() {
       </p>
 
       <div className="mt-12 grid gap-12 md:grid-cols-[1fr_1.4fr] md:gap-16">
+        {/* Contact Details Cards */}
         <div className="flex flex-col gap-6">
           {contactDetails.map((item) => (
-            <div key={item.label} className="flex items-start gap-4">
-              <span className="flex size-10 shrink-0 items-center justify-center bg-primary/10 text-primary">
+            <div
+              key={item.label}
+              className="flex items-start gap-4 border border-border p-4 bg-card/40 hover:bg-card transition-all duration-300 hover:-translate-y-0.5 group"
+            >
+              <span className="flex size-12 shrink-0 items-center justify-center bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                 <item.icon className="size-5" aria-hidden="true" />
               </span>
               <div>
@@ -57,7 +61,7 @@ export default function ContactPage() {
                 {item.href ? (
                   <a
                     href={item.href}
-                    className="mt-1 block font-medium transition-colors hover:text-primary"
+                    className="mt-1 block font-medium transition-colors hover:text-primary select-none cursor-pointer"
                   >
                     {item.value}
                   </a>
@@ -67,12 +71,13 @@ export default function ContactPage() {
               </div>
             </div>
           ))}
+          
           <div className="mt-2 border-t border-border pt-6">
             <p className="text-sm leading-relaxed text-muted-foreground">
               Looking to volunteer instead? Use the dedicated{' '}
               <a
                 href="/volunteer"
-                className="font-medium text-primary underline-offset-4 hover:underline"
+                className="font-medium text-primary underline-offset-4 hover:underline select-none cursor-pointer"
               >
                 volunteer application
               </a>{' '}
@@ -81,7 +86,8 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="border border-border bg-card p-6 md:p-8">
+        {/* Message Form Box */}
+        <div className="border border-border bg-card p-6 md:p-8 shadow-sm">
           <h2 className="mb-6 font-heading text-2xl font-bold tracking-tight">
             Send us a message
           </h2>

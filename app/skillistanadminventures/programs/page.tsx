@@ -558,7 +558,7 @@ export default function AdminProgramsPage() {
               </button>
               <button
                 onClick={confirmDeleteProgram}
-                className="bg-destructive text-destructive-foreground px-4 py-2 text-xs font-medium hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer"
+                className="bg-destructive text-white px-4 py-2 text-xs font-medium hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer"
               >
                 Delete Permanently
               </button>

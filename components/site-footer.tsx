@@ -53,13 +53,13 @@ export function SiteFooter() {
               <ul className="mt-4 flex flex-col gap-2.5 text-sm text-ink-foreground/80">
                 <li>
                   <a
-                    href="mailto:hello@skillistan.org"
+                    href="mailto:contact@skillistan.org"
                     className="transition-colors hover:text-primary"
                   >
-                    hello@skillistan.org
+                    contact@skillistan.org
                   </a>
                 </li>
-                <li>Peshawar, Pakistan</li>
+                <li>Bahria Town Phase 4, Islamabad, Pakistan</li>
               </ul>
             </div>
           </div>

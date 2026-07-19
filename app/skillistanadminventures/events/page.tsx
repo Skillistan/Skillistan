@@ -735,7 +735,7 @@ export default function AdminEventsPage() {
                       id="ev-location"
                       type="text"
                       maxLength={LOCATION_MAX}
-                      placeholder="e.g. Peshawar University / Online (Zoom)"
+                      placeholder="e.g. Bahria Town Phase 4, Islamabad / Online (Zoom)"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       className="w-full border border-input bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -1062,7 +1062,7 @@ export default function AdminEventsPage() {
               </button>
               <button
                 onClick={confirmDeleteEvent}
-                className="bg-destructive text-destructive-foreground px-4 py-2 text-xs font-medium hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer"
+                className="bg-destructive text-white px-4 py-2 text-xs font-medium hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer"
               >
                 Delete Permanently
               </button>

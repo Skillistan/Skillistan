@@ -29,7 +29,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 pt-14 pb-16 md:px-6 md:pt-20 md:pb-24">
         <p className="text-xs font-medium tracking-widest text-primary uppercase">
-          Youth-led · Peshawar, Pakistan
+          Youth-led · Bahria Town Phase 4, Islamabad
         </p>
         <h1 className="mt-4 font-heading text-5xl leading-[0.95] font-bold tracking-tight text-balance md:text-8xl">
           Skills grow.
@@ -62,7 +62,7 @@ export default function HomePage() {
         <div className="relative mt-12 aspect-[16/8] w-full overflow-hidden md:mt-16">
           <Image
             src="/images/group-photo.jpg"
-            alt="Skillistan training cohort holding certificates on the steps of a partner campus in Peshawar"
+            alt="Skillistan training cohort holding certificates on the steps of a partner campus"
             fill
             priority
             sizes="(max-width: 1152px) 100vw, 1152px"
