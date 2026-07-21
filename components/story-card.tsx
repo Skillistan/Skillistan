@@ -2,7 +2,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { formatDate, type Story } from '@/lib/content'
 
-export function StoryCard({ story }: { story: Story }) {
+export function StoryCard({
+  story,
+}: {
+  story: {
+    slug: string
+    title: string
+    excerpt: string
+    featuredImageUrl: string | null
+    publishedAt: string | Date | null
+  }
+}) {
   return (
     <article className="group flex flex-col">
       <Link href={`/stories/${story.slug}`} className="flex flex-col">

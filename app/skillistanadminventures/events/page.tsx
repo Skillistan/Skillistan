@@ -102,10 +102,10 @@ const Badge = ({
   variant?: "primary" | "muted" | "success" | "warn";
 }) => {
   const styles: Record<string, string> = {
-    primary: "bg-primary text-primary-foreground",
-    muted: "bg-muted text-muted-foreground",
-    success: "bg-primary/10 text-primary",
-    warn: "bg-amber-500/10 text-amber-600",
+    primary: "bg-primary text-primary-foreground font-bold shadow-sm",
+    muted: "bg-zinc-600 text-white font-bold shadow-sm",
+    success: "bg-emerald-600 text-white font-bold shadow-sm",
+    warn: "bg-amber-500 text-white font-bold shadow-sm",
   };
   return (
     <span
@@ -853,7 +853,7 @@ export default function AdminEventsPage() {
                       id="ev-status"
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
-                      className="w-full border border-input bg-card px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                      className="w-full border border-border bg-card hover:bg-muted/40 px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer transition-colors shadow-sm rounded-sm"
                     >
                       <option value="draft">Draft — admin only</option>
                       <option value="published">Published — visible on site</option>

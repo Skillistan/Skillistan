@@ -615,7 +615,7 @@ export default function AdminTeamPage() {
                     id="category"
                     value={category}
                     onChange={(e) => handleCategoryChange(e.target.value)}
-                    className="w-full border border-input bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full border border-border bg-card hover:bg-muted/40 px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer transition-colors shadow-sm rounded-sm"
                   >
                     <option value="leadership">Senior Management</option>
                     <option value="employee">Staff & Trainers</option>

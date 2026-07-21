@@ -217,6 +217,57 @@ async function main() {
     }
   }
 
+  // 5. Seed Stories
+  console.log("Seeding sample stories...");
+  const sampleStories = [
+    {
+      title: "Skillistan recognized at LCOY Khyber Pakhtunkhwa",
+      slug: "skillistan-recognized-at-lcoy-kp",
+      excerpt: "Skillistan received formal recognition as a lead organizing partner at the Local Conference of Youth, a milestone for youth-led climate action in the region.",
+      content: "At the Local Conference of Youth (LCOY) in Khyber Pakhtunkhwa, Skillistan was formally recognized for its exceptional contribution as a lead organizing partner. The award reflects months of coordination between volunteers, partner organizations, and local institutions.\n\nLCOY is a youth-driven event under the umbrella of YOUNGO, the official youth constituency of the UNFCCC. Bringing it to Peshawar meant creating a platform where young people from across the province could shape the climate conversation directly.\n\nFor our team, the recognition matters less than what it represents: proof that youth-led organizations in Pakistan can convene serious, credible platforms for climate action — and that young people will show up when given the chance.",
+      featuredImageUrl: "/images/lcoy-certificate.jpg",
+      status: "published",
+      publishedAt: new Date("2024-08-05T00:00:00Z"),
+    },
+    {
+      title: "A plant for every promise",
+      slug: "a-plant-for-every-promise",
+      excerpt: "Why we hand every speaker and partner a living plant instead of a plaque — a small ritual that captures how Skillistan thinks about growth.",
+      content: "At Skillistan events, guests of honor rarely leave with a framed plaque. They leave with a potted plant. It began as a practical choice — a sustainable alternative to shields and trophies — but it has become one of our defining rituals.\n\nA plant asks something of you. It has to be watered, placed in the light, and given time. That is exactly how we think about skills development: not a certificate handed over in a single ceremony, but something living that the recipient has to keep growing.\n\nHundreds of plants later, the ritual has followed us to conferences, workshops, and campus sessions. Some of our partners now send us photos of their plants, years on. That, more than any award, is the impact we are after.",
+      featuredImageUrl: "/images/plant-gift.jpg",
+      status: "published",
+      publishedAt: new Date("2024-09-12T00:00:00Z"),
+    },
+    {
+      title: "Certificates, and what comes after",
+      slug: "certificates-and-what-comes-after",
+      excerpt: "Dozens of students completed our latest training cohort. Here is what the certificate ceremony looked like — and why the real work starts the day after.",
+      content: "On the steps of our partner campus in Peshawar, dozens of students lined up with freshly printed certificates after completing a Skillistan training cohort. The photographs from that day are some of our favorites — but the ceremony is never the point.\n\nEvery cohort ends with a simple question: what will you do with this in the next ninety days? Participants leave with a concrete next step — a freelance profile to publish, a community session to lead, a project to start.\n\nFollow-ups with alumni tell us the model works. Graduates have gone on to lead their own campus societies, land first freelance clients, and return as volunteer trainers for the next cohort. The certificate is a beginning, not an ending.",
+      featuredImageUrl: "/images/group-photo.jpg",
+      status: "published",
+      publishedAt: new Date("2024-10-20T00:00:00Z"),
+    },
+  ];
+
+  for (const story of sampleStories) {
+    const existing = await prisma.story.findUnique({
+      where: { slug: story.slug },
+    });
+
+    if (!existing) {
+      await prisma.story.create({
+        data: story,
+      });
+      console.log(`Created sample story: ${story.title}`);
+    } else {
+      await prisma.story.update({
+        where: { id: existing.id },
+        data: story,
+      });
+      console.log(`Updated sample story: ${story.title}`);
+    }
+  }
+
   console.log("Database seeding completed successfully.");
   await pool.end();
 }

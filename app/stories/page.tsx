@@ -2,7 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { StoryCard } from '@/components/story-card'
-import { formatDate, stories } from '@/lib/content'
+import { formatDate } from '@/lib/content'
+import db from '@/lib/db'
 
 export const metadata: Metadata = {
   title: 'Stories',
@@ -10,7 +11,13 @@ export const metadata: Metadata = {
     'Stories, updates, and recaps from Skillistan — youth empowerment and climate action from the field in Pakistan.',
 }
 
-export default function StoriesPage() {
+export default async function StoriesPage() {
+  // Fetch published stories dynamically from the database
+  const stories = await db.story.findMany({
+    where: { status: 'published' },
+    orderBy: { publishedAt: 'desc' },
+  })
+
   const [featured, ...rest] = stories
 
   return (
@@ -25,7 +32,7 @@ export default function StoriesPage() {
       </section>
 
       {/* Featured story */}
-      {featured && (
+      {featured ? (
         <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6">
           <Link
             href={`/stories/${featured.slug}`}
@@ -34,7 +41,7 @@ export default function StoriesPage() {
             {featured.featuredImageUrl && (
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={featured.featuredImageUrl || '/placeholder.svg'}
+                  src={featured.featuredImageUrl}
                   alt={featured.title}
                   fill
                   priority
@@ -50,7 +57,7 @@ export default function StoriesPage() {
               <h2 className="mt-3 font-heading text-2xl font-bold text-balance underline-offset-4 group-hover:underline md:text-4xl">
                 {featured.title}
               </h2>
-              <p className="mt-4 leading-relaxed text-muted-foreground">
+              <p className="mt-4 leading-relaxed text-muted-foreground text-sm">
                 {featured.excerpt}
               </p>
               <span className="mt-6 inline-block text-sm font-medium text-primary">
@@ -59,16 +66,27 @@ export default function StoriesPage() {
             </div>
           </Link>
         </section>
+      ) : (
+        <section className="mx-auto max-w-lg px-4 py-20 text-center">
+          <div className="border border-dashed border-border bg-card/45 p-12">
+            <p className="font-heading text-lg font-bold">No stories listed yet</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              We are working on bringing you the latest updates from our camp sessions and climate workshops. Check back soon!
+            </p>
+          </div>
+        </section>
       )}
 
-      {/* Rest */}
-      <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6 md:pb-24">
-        <div className="grid gap-8 md:grid-cols-3">
-          {rest.map((story) => (
-            <StoryCard key={story.slug} story={story} />
-          ))}
-        </div>
-      </section>
+      {/* Remaining stories grid */}
+      {rest.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6 md:pb-24">
+          <div className="grid gap-8 md:grid-cols-3">
+            {rest.map((story) => (
+              <StoryCard key={story.slug} story={story} />
+            ))}
+          </div>
+        </section>
+      )}
     </>
   )
 }

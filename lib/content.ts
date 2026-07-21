@@ -162,8 +162,9 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 })
 
-export function formatDate(iso: string) {
-  return dateFormatter.format(new Date(iso))
+export function formatDate(date: string | Date | null) {
+  if (!date) return ''
+  return dateFormatter.format(new Date(date))
 }
 
 export function getUpcomingEvents() {
