@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Mail, Phone, MapPin, MessageSquare } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageSquare, ShieldCheck } from 'lucide-react'
 import { NewsletterForm } from '@/components/newsletter-form'
 
 const navLinks = [
@@ -17,34 +17,34 @@ export function SiteFooter() {
   return (
     <footer className="overflow-hidden bg-ink text-ink-foreground select-none">
       <div className="mx-auto max-w-6xl px-4 pt-14 md:px-6 md:pt-16">
-        {/* Top Row: Brand & Newsletter */}
-        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-start md:justify-between">
-          {/* Brand Info */}
-          <div className="space-y-4 max-w-md">
-            <Link href="/" className="flex items-center gap-2.5" aria-label="Skillistan Home">
-              <Image
-                src="/images/logo.svg"
-                alt="Skillistan Logo"
-                width={32}
-                height={30}
-                className="h-8 w-auto"
-              />
-              <span className="font-heading text-xl font-bold tracking-tight text-ink-foreground">
-                Skill<span className="text-primary">istan</span>
-              </span>
-            </Link>
-            <p className="text-xs font-semibold text-primary uppercase tracking-widest">
-              Empowering Youth for Sustainable Growth
-            </p>
-            
-            {/* Location Tag */}
-            <p className="flex items-center gap-1.5 text-xs text-ink-foreground/75">
-              <MapPin className="size-3.5 shrink-0 text-primary" />
-              Bahria Town Phase 4, Islamabad, Pakistan
-            </p>
+        {/* Top Row: Balanced 2-Column Grid (Left & Right 50/50) */}
+        <div className="grid gap-10 md:grid-cols-2 items-start justify-between">
+          {/* Left Column: Brand & Direct Contact */}
+          <div className="flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <Link href="/" className="flex items-center gap-2.5" aria-label="Skillistan Home">
+                <Image
+                  src="/images/logo.svg"
+                  alt="Skillistan Logo"
+                  width={32}
+                  height={30}
+                  className="h-8 w-auto"
+                />
+                <span className="font-heading text-xl font-bold tracking-tight text-ink-foreground">
+                  Skill<span className="text-primary">istan</span>
+                </span>
+              </Link>
+              <p className="text-xs font-semibold text-primary uppercase tracking-widest">
+                Empowering Youth for Sustainable Growth
+              </p>
+              <p className="flex items-center gap-1.5 text-xs text-ink-foreground/75">
+                <MapPin className="size-3.5 shrink-0 text-primary" />
+                Bahria Town Phase 4, Islamabad, Pakistan
+              </p>
+            </div>
 
             {/* Quick Contact Action Buttons */}
-            <div className="flex items-center gap-2 pt-1">
+            <div className="flex flex-wrap items-center gap-2 pt-1">
               <a
                 href="mailto:contact@skillistan.org"
                 title="Email us at contact@skillistan.org"
@@ -74,17 +74,25 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Newsletter Box */}
-          <div className="space-y-2">
-            <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-ink-foreground/50">
-              Stay in the loop
-            </h3>
-            <p className="text-xs text-ink-foreground/70 leading-relaxed">
-              Updates on bootcamps, workshops, and stories from the field.
-            </p>
-            <div className="pt-1">
-              <NewsletterForm />
+          {/* Right Column: Newsletter Subscription (Height Balanced) */}
+          <div className="flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-ink-foreground/50">
+                Stay in the loop
+              </h3>
+              <p className="text-xs text-ink-foreground/75 leading-relaxed">
+                Receive direct updates on upcoming bootcamps, workshops, and stories from the field.
+              </p>
+              <div className="pt-0.5">
+                <NewsletterForm />
+              </div>
             </div>
+
+            {/* Bottom Reassurance Badge (Aligns with left buttons) */}
+            <p className="flex items-center gap-1.5 text-xs text-ink-foreground/60">
+              <ShieldCheck className="size-3.5 text-primary shrink-0" />
+              No spam. Direct updates on youth bootcamps and climate events.
+            </p>
           </div>
         </div>
 
