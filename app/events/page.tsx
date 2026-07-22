@@ -8,7 +8,7 @@ import db from '@/lib/db'
 export const metadata: Metadata = {
   title: 'Events',
   description:
-    'Upcoming and past Skillistan events — bootcamps, workshops, and youth climate conferences across Pakistan.',
+    'Upcoming and past Skillistan events, including bootcamps, workshops, and youth climate conferences across Pakistan.',
 }
 
 const formatEventDate = (date: Date) => {
@@ -45,7 +45,7 @@ export default async function EventsPage() {
           Show up. Skill up.
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-          Bootcamps, workshops, and conferences — free or low-cost, always
+          Bootcamps, workshops, and conferences: free or low-cost, always
           hands-on, and open to students and young professionals.
         </p>
       </section>

@@ -39,7 +39,7 @@ export default function HomePage() {
         <div className="mt-10 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <p className="max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
             Skillistan equips young people across Pakistan with practical
-            skills, digital literacy, and climate leadership — so growth is
+            skills, digital literacy, and climate leadership so growth is
             something they build, not wait for.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -95,7 +95,7 @@ export default function HomePage() {
       <section className="bg-ink text-ink-foreground">
         <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
           <h2 className="max-w-2xl font-heading text-3xl font-bold tracking-tight text-balance md:text-5xl">
-            Youth empowerment, measured in people — not promises.
+            Youth empowerment, measured in people, not promises.
           </h2>
           <dl className="mt-12 grid grid-cols-2 gap-px bg-ink-foreground/15 md:grid-cols-4">
             {impactStats.map((stat) => (
@@ -192,7 +192,7 @@ export default function HomePage() {
               The next cohort needs people like you.
             </h2>
             <p className="mt-4 max-w-md leading-relaxed text-muted-foreground text-pretty">
-              Volunteer as a trainer, organizer, or campaigner — or partner
+              Volunteer as a trainer, organizer, or campaigner, or partner
               with us to bring programs to your campus or community.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">

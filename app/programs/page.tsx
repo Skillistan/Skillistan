@@ -26,7 +26,7 @@ export default async function ProgramsPage() {
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
           Every Skillistan program is practical, local, and designed to leave
-          participants with something they can act on immediately — a skill, a
+          participants with something they can act on immediately: a skill, a
           plan, or a platform.
         </p>
       </section>

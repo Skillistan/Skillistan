@@ -5,7 +5,7 @@ import { InquiryForm } from '@/components/inquiry-form'
 export const metadata: Metadata = {
   title: 'Volunteer',
   description:
-    'Apply to volunteer with Skillistan — train, organize, and campaign alongside a youth-led team working on skills and sustainability in Pakistan.',
+    'Apply to volunteer with Skillistan: train, organize, and campaign alongside a youth-led team working on skills and sustainability in Pakistan.',
 }
 
 const roles = [
@@ -17,7 +17,7 @@ const roles = [
   {
     title: 'Event organizers',
     description:
-      'Help plan and run bootcamps, workshops, and conferences — logistics, registration, and on-the-day coordination.',
+      'Help plan and run bootcamps, workshops, and conferences, including logistics, registration, and on-the-day coordination.',
   },
   {
     title: 'Climate campaigners',
@@ -49,7 +49,7 @@ export default function VolunteerPage() {
           Do work that outlasts the event.
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-          Skillistan is powered by volunteers — students and young
+          Skillistan is powered by volunteers: students and young
           professionals who train, organize, and campaign in their own
           communities. Join them.
         </p>

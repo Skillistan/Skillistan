@@ -8,7 +8,7 @@ import db from '@/lib/db'
 export const metadata: Metadata = {
   title: 'Stories',
   description:
-    'Stories, updates, and recaps from Skillistan — youth empowerment and climate action from the field in Pakistan.',
+    'Stories, updates, and recaps from Skillistan: youth empowerment and climate action from the field in Pakistan.',
 }
 
 export default async function StoriesPage() {

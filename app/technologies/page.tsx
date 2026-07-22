@@ -4,7 +4,7 @@ import { ArrowRight, Home } from "lucide-react";
 export const metadata = {
   title: "Skillistan Technologies | Coming Soon",
   description:
-    "Skillistan Technologies is our upcoming specialized digital studio — engineering web platforms, AI solutions, and cloud infrastructure.",
+    "Skillistan Technologies is our upcoming specialized digital studio: engineering web platforms, AI solutions, and cloud infrastructure.",
 };
 
 const focusAreas = [
@@ -43,7 +43,7 @@ export default function SkillistanTechnologiesPage() {
         Building the future of tech.
       </h1>
       <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-        Skillistan Technologies is our upcoming specialized digital studio — engineering custom web applications, AI tools, and technical acceleration. Launching Q3 2026.
+        Skillistan Technologies is our upcoming specialized digital studio, engineering custom web applications, AI tools, and technical acceleration. Launching Q3 2026.
       </p>
 
       {/* Focus Areas Grid */}
@@ -71,7 +71,7 @@ export default function SkillistanTechnologiesPage() {
       {/* Return to Portal Link */}
       <div className="mt-14 pt-8 border-t border-border flex items-center justify-between">
         <span className="text-xs text-muted-foreground">
-          Under active development — Skillistan Pakistan
+          Under active development (Skillistan Pakistan)
         </span>
         <Link
           href="/"

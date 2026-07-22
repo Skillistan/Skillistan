@@ -5,7 +5,7 @@ import { InquiryForm } from '@/components/inquiry-form'
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Get in touch with Skillistan — partnerships, program requests, media, or general questions.',
+    'Get in touch with Skillistan for partnerships, program requests, media, or general questions.',
 }
 
 const contactDetails = [
@@ -39,7 +39,7 @@ export default function ContactPage() {
         {"Let's talk."}
       </h1>
       <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-        Partnerships, program requests, media inquiries, or a simple hello —
+        Partnerships, program requests, media inquiries, or a simple hello:
         we read everything and reply as fast as we can.
       </p>
 

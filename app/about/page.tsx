@@ -19,7 +19,7 @@ const beliefs = [
   {
     title: 'Youth lead, not attend',
     description:
-      'Young people are organizers, trainers, and decision-makers in everything we do — not just an audience to be spoken at.',
+      'Young people are organizers, trainers, and decision-makers in everything we do, not just an audience to be spoken at.',
   },
   {
     title: 'Local first',
@@ -29,7 +29,7 @@ const beliefs = [
   {
     title: 'Growth is sustainable',
     description:
-      'From climate action to career skills, we only invest in growth that can be maintained — by people, and by the planet.',
+      'From climate action to career skills, we only invest in growth that can be maintained by people, and by the planet.',
   },
 ]
 
@@ -82,7 +82,7 @@ export default async function AboutPage() {
           <div className="flex flex-col justify-center gap-5 leading-relaxed text-muted-foreground">
             <p>
               Skillistan began with a simple observation: young people in
-              Pakistan are not short on talent — they are short on access.
+              Pakistan are not short on talent, they are short on access.
               Access to practical training, to digital tools, to platforms
               where their voices count.
             </p>
@@ -98,8 +98,8 @@ export default async function AboutPage() {
               <strong className="text-foreground">
                 Empowering Youth for Sustainable Growth.
               </strong>{' '}
-              If a program does not leave young people more capable — and the
-              community more resilient — we do not run it.
+              If a program does not leave young people more capable and the
+              community more resilient, we do not run it.
             </p>
           </div>
         </div>
@@ -124,7 +124,7 @@ export default async function AboutPage() {
             </p>
             <p className="mt-4 font-heading text-2xl leading-snug font-bold text-balance md:text-3xl">
               A Pakistan where every young person can turn their potential
-              into progress — for themselves, their communities, and the
+              into progress for themselves, their communities, and the
               planet.
             </p>
           </div>
@@ -357,7 +357,7 @@ export default async function AboutPage() {
           Want to build this with us?
         </h2>
         <p className="mx-auto mt-4 max-w-md leading-relaxed text-muted-foreground">
-          Whether you want to volunteer, partner, or simply learn more — we
+          Whether you want to volunteer, partner, or simply learn more, we
           would love to hear from you.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
