@@ -56,10 +56,10 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link
-            href="/volunteer"
+            href="/technologies"
             className="bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Volunteer
+            Skillistan Technologies
           </Link>
         </nav>
 
@@ -92,10 +92,10 @@ export function SiteHeader() {
               </Link>
             ))}
             <Link
-              href="/volunteer"
+              href="/technologies"
               className="mt-3 mb-2 bg-foreground px-4 py-3 text-center text-base font-medium text-background"
             >
-              Volunteer
+              Skillistan Technologies
             </Link>
           </div>
         </nav>

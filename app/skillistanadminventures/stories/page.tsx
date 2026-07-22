@@ -442,7 +442,7 @@ export default function AdminStoriesPage() {
                   />
                   {isSlugDuplicate(slug) && (
                     <p className="text-xs text-destructive font-semibold mt-1">
-                      ⚠️ A story with this title/slug already exists. Please enter a unique title.
+                      A story with this title/slug already exists. Please enter a unique title.
                     </p>
                   )}
                   {fieldErrors.title && (
