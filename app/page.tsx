@@ -4,12 +4,8 @@ import { ArrowUpRight } from 'lucide-react'
 import { SectionHeading } from '@/components/section-heading'
 import { EventCard } from '@/components/event-card'
 import { StoryCard } from '@/components/story-card'
-import {
-  getUpcomingEvents,
-  impactStats,
-  programs,
-  stories,
-} from '@/lib/content'
+import db from '@/lib/db'
+import { impactStats, programs as staticPrograms } from '@/lib/content'
 
 const tickerItems = [
   'Youth Skills',
@@ -20,14 +16,42 @@ const tickerItems = [
   'Sustainability',
 ]
 
-export default function HomePage() {
-  const upcomingEvents = getUpcomingEvents().slice(0, 2)
-  const recentStories = stories.slice(0, 3)
+export default async function HomePage() {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  // Query real database records for events, stories, and programs
+  const [dbEvents, dbStories, dbPrograms] = await Promise.all([
+    db.event.findMany({
+      where: { status: 'published', eventDate: { gte: today } },
+      orderBy: { eventDate: 'asc' },
+      take: 2,
+    }),
+    db.story.findMany({
+      where: { status: 'published' },
+      orderBy: { publishedAt: 'desc' },
+      take: 3,
+    }),
+    db.program.findMany({
+      orderBy: { number: 'asc' },
+      take: 5,
+    }),
+  ])
+
+  // Fallback to static program items if database programs are not seeded
+  const displayPrograms =
+    dbPrograms.length > 0
+      ? dbPrograms.map((p) => ({
+          number: p.number,
+          title: p.title,
+          description: p.description,
+        }))
+      : staticPrograms
 
   return (
     <>
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-4 pt-14 pb-16 md:px-6 md:pt-20 md:pb-24">
+      <section className="mx-auto max-w-6xl px-4 pt-14 pb-12 md:px-6 md:pt-20 md:pb-16">
         <p className="text-xs font-medium tracking-widest text-primary uppercase">
           Youth-led · Bahria Town Phase 4, Islamabad
         </p>
@@ -45,13 +69,13 @@ export default function HomePage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/programs"
-              className="bg-foreground px-5 py-3 text-sm font-medium text-background transition-colors hover:bg-primary hover:text-primary-foreground"
+              className="bg-foreground px-5 py-3 text-sm font-medium text-background transition-colors hover:bg-primary hover:text-primary-foreground select-none cursor-pointer"
             >
               Explore programs
             </Link>
             <Link
               href="/volunteer"
-              className="inline-flex items-center gap-1 border border-foreground px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground hover:text-background"
+              className="inline-flex items-center gap-1 border border-foreground px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground hover:text-background select-none cursor-pointer"
             >
               Become a volunteer
               <ArrowUpRight className="size-4" aria-hidden="true" />
@@ -59,7 +83,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative mt-12 aspect-[16/8] w-full overflow-hidden md:mt-16">
+        <div className="relative mt-12 aspect-[16/8] w-full overflow-hidden md:mt-16 border border-border">
           <Image
             src="/images/group-photo.jpg"
             alt="Skillistan training cohort holding certificates on the steps of a partner campus"
@@ -71,9 +95,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ticker */}
+      {/* Curved Ticker Ribbon Banner */}
       <div
-        className="overflow-hidden border-y border-border bg-background py-4"
+        className="relative my-8 -rotate-1 scale-[1.02] border-y border-primary/30 bg-primary/10 py-3.5 shadow-sm overflow-hidden select-none"
         aria-hidden="true"
       >
         <div className="animate-marquee flex w-max gap-8">
@@ -81,7 +105,7 @@ export default function HomePage() {
             (item, i) => (
               <span
                 key={i}
-                className="flex items-center gap-8 font-heading text-sm font-medium tracking-widest whitespace-nowrap uppercase"
+                className="flex items-center gap-8 font-heading text-xs font-bold tracking-widest whitespace-nowrap uppercase text-foreground"
               >
                 {item}
                 <span className="text-primary">✦</span>
@@ -112,7 +136,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Programs */}
+      {/* Real Programs Snapshot */}
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
         <SectionHeading
           eyebrow="What we do"
@@ -121,7 +145,7 @@ export default function HomePage() {
           linkLabel="All programs"
         />
         <div className="mt-10">
-          {programs.map((program) => (
+          {displayPrograms.map((program) => (
             <div
               key={program.number}
               className="group grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-1 border-t border-border py-6 last:border-b md:grid-cols-[6rem_1fr_1.2fr] md:gap-x-10 md:py-8"
@@ -140,7 +164,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Events */}
+      {/* Real Upcoming Events Snapshot */}
       <section className="border-t border-border bg-secondary/60">
         <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
           <SectionHeading
@@ -149,15 +173,35 @@ export default function HomePage() {
             linkHref="/events"
             linkLabel="All events"
           />
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {upcomingEvents.map((event) => (
-              <EventCard key={event.slug} event={event} />
-            ))}
+          <div className="mt-10">
+            {dbEvents.length === 0 ? (
+              <div className="border border-dashed border-border bg-card/45 p-10 text-center max-w-md mx-auto">
+                <p className="font-heading text-base font-bold">
+                  No upcoming events scheduled right now
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                  We are planning our next batch of bootcamps and workshops. Check back soon or get in touch with our team.
+                </p>
+                <Link
+                  href="/contact"
+                  className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline select-none cursor-pointer"
+                >
+                  Get in touch
+                  <ArrowUpRight className="size-3.5" />
+                </Link>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2">
+                {dbEvents.map((event) => (
+                  <EventCard key={event.slug} event={event} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Stories */}
+      {/* Real Recent Stories Snapshot */}
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
         <SectionHeading
           eyebrow="From the field"
@@ -165,17 +209,30 @@ export default function HomePage() {
           linkHref="/stories"
           linkLabel="All stories"
         />
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          {recentStories.map((story) => (
-            <StoryCard key={story.slug} story={story} />
-          ))}
+        <div className="mt-10">
+          {dbStories.length === 0 ? (
+            <div className="border border-dashed border-border bg-card/45 p-10 text-center max-w-md mx-auto">
+              <p className="font-heading text-base font-bold">
+                No recent stories published yet
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                We are working on bringing you news and updates from our latest campus sessions.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-3">
+              {dbStories.map((story) => (
+                <StoryCard key={story.slug} story={story} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* CTA */}
       <section className="border-t border-border">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:items-center md:px-6 md:py-24">
-          <div className="relative aspect-[4/3] overflow-hidden">
+          <div className="relative aspect-[4/3] overflow-hidden border border-border">
             <Image
               src="/images/sdg-team.jpg"
               alt="Skillistan volunteers holding the Skillistan sign behind blocks of the 17 Sustainable Development Goals"
@@ -198,13 +255,13 @@ export default function HomePage() {
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/volunteer"
-                className="bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                className="bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 select-none cursor-pointer"
               >
                 Apply to volunteer
               </Link>
               <Link
                 href="/contact"
-                className="border border-foreground px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground hover:text-background"
+                className="border border-foreground px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground hover:text-background select-none cursor-pointer"
               >
                 Partner with us
               </Link>
