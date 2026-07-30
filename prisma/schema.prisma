@@ -39,10 +39,15 @@ model Program {
   id          String   @id @default(uuid())
   number      String   // e.g. "01", "02"
   title       String
+  slug        String   @unique @default(uuid())
+  tagline     String?
+  overview    String?  @db.Text
+  outcomes    String?  @db.Text
   description String   @db.Text
   imageUrl    String?  @map("image_url") // optional program cover photo
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+  events      Event[]
 
   @@map("programs")
 }
@@ -50,6 +55,7 @@ model Program {
 // 4. Events
 model Event {
   id                  String              @id @default(uuid())
+  programId           String?             @map("program_id")
   title               String
   slug                String              @unique
   description         String              @default("") @db.Text
@@ -61,6 +67,7 @@ model Event {
   createdAt           DateTime            @default(now()) @map("created_at")
   updatedAt           DateTime            @updatedAt @map("updated_at")
   registrations       EventRegistration[]
+  program             Program?            @relation(fields: [programId], references: [id], onDelete: SetNull)
 
   @@map("events")
 }

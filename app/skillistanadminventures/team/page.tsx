@@ -44,6 +44,11 @@ export default function AdminTeamPage() {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertError, setAlertError] = useState<string | null>(null);
 
+  // Custom delete confirmation modal states
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<TeamMember | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   useEffect(() => {
     fetchMembers();
   }, []);
@@ -223,11 +228,16 @@ export default function AdminTeamPage() {
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+  const triggerDeleteConfirm = (member: TeamMember) => {
+    setMemberToDelete(member);
+    setDeleteConfirmOpen(true);
+  };
 
+  const confirmDeleteMember = async () => {
+    if (!memberToDelete) return;
+    setDeleting(true);
     try {
-      const res = await fetch(`/api/admin/team/${id}`, {
+      const res = await fetch(`/api/admin/team/${memberToDelete.id}`, {
         method: "DELETE",
       });
 
@@ -236,10 +246,14 @@ export default function AdminTeamPage() {
 
       setAlertMessage("Team member deleted successfully.");
       setTimeout(() => setAlertMessage(null), 3000);
+      setDeleteConfirmOpen(false);
+      setMemberToDelete(null);
 
       fetchMembers();
     } catch (err: any) {
       setAlertError(err.message || "Failed to delete team member.");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -395,7 +409,7 @@ export default function AdminTeamPage() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(member.id, member.name)}
+                        onClick={() => triggerDeleteConfirm(member)}
                         className="flex items-center gap-1.5 text-xs text-destructive hover:bg-destructive/5 transition-colors p-1"
                         aria-label={`Delete ${member.name}`}
                       >
@@ -463,7 +477,7 @@ export default function AdminTeamPage() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(member.id, member.name)}
+                        onClick={() => triggerDeleteConfirm(member)}
                         className="flex items-center gap-1.5 text-xs text-destructive hover:bg-destructive/5 transition-colors"
                       >
                         <Trash2 size={12} />
@@ -527,7 +541,7 @@ export default function AdminTeamPage() {
                         <Pencil size={11} />
                       </button>
                       <button
-                        onClick={() => handleDelete(member.id, member.name)}
+                        onClick={() => triggerDeleteConfirm(member)}
                         className="text-destructive hover:bg-destructive/5 transition-colors p-1"
                         title="Delete member"
                       >
@@ -759,6 +773,45 @@ export default function AdminTeamPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/*  Custom Delete Team Member Confirmation Modal                */}
+      {/* ============================================================ */}
+      {deleteConfirmOpen && memberToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="relative w-full max-w-md border border-border bg-card p-6 md:p-8 shadow-lg">
+            <h3 className="font-heading text-lg font-bold text-destructive flex items-center gap-2 select-none">
+              <Trash2 size={20} className="shrink-0" />
+              Delete Team Member
+            </h3>
+            <p className="text-sm text-muted-foreground mt-4 leading-relaxed text-pretty">
+              Are you sure you want to delete <strong className="text-foreground">{memberToDelete.name}</strong>?
+              <br />
+              This will permanently remove them from the roster. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-border">
+              <button
+                onClick={() => {
+                  setDeleteConfirmOpen(false);
+                  setMemberToDelete(null);
+                }}
+                disabled={deleting}
+                className="border border-border bg-card px-4 py-2 text-xs font-medium text-foreground hover:bg-muted transition-colors cursor-pointer select-none disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteMember}
+                disabled={deleting}
+                className="bg-destructive text-white font-bold px-4 py-2 text-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer select-none disabled:opacity-50"
+              >
+                {deleting && <Loader2 className="animate-spin size-3.5" />}
+                {deleting ? "Deleting..." : "Delete Permanently"}
+              </button>
+            </div>
           </div>
         </div>
       )}

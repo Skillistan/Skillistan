@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { ArrowRight } from 'lucide-react'
 import db from '@/lib/db'
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default async function ProgramsPage() {
     <>
       <section className="mx-auto max-w-6xl px-4 pt-14 pb-12 md:px-6 md:pt-20 md:pb-16">
         <p className="text-xs font-medium tracking-widest text-primary uppercase">
-          Our work
+          Our Work
         </p>
         <h1 className="mt-4 max-w-3xl font-heading text-4xl leading-tight font-bold tracking-tight text-balance md:text-6xl">
           Programs built for how young people actually grow.
@@ -42,53 +43,69 @@ export default async function ProgramsPage() {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col">
-            {list.map((program) => (
-              <article
-                key={program.id}
-                className="grid gap-6 border-t border-border py-10 last:border-b md:grid-cols-[6rem_1fr] md:gap-10 md:py-14"
-              >
-                <span
-                  aria-hidden="true"
-                  className="font-heading text-5xl font-bold text-primary/30 md:text-6xl select-none"
+          <div className="flex flex-col border-b border-border">
+            {list.map((program) => {
+              const programSlug = program.slug || program.number
+              return (
+                <article
+                  key={program.id}
+                  className="group grid gap-6 border-t border-border py-10 md:grid-cols-[6rem_1fr] md:gap-10 md:py-14 hover:bg-card/40 transition-colors px-2 md:px-4"
                 >
-                  {program.number}
-                </span>
-                <div className="max-w-2xl">
-                  <h2 className="font-heading text-2xl font-bold text-balance md:text-3xl">
-                    {program.title}
-                  </h2>
-                  <p className="mt-3 leading-relaxed text-muted-foreground text-sm whitespace-pre-wrap">
-                    {program.description}
-                  </p>
-                  
-                  {/* Dynamic image rendering with hardcoded fallback for program number 03 */}
-                  {program.imageUrl ? (
-                    <div className="relative mt-8 aspect-[16/8] overflow-hidden border border-border">
-                      <Image
-                        src={program.imageUrl}
-                        alt={program.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 672px"
-                        className="object-cover"
-                      />
+                  <span
+                    aria-hidden="true"
+                    className="font-heading text-5xl font-bold text-primary/30 md:text-6xl select-none group-hover:text-primary transition-colors"
+                  >
+                    {program.number}
+                  </span>
+                  <div className="max-w-3xl space-y-4">
+                    <div>
+                      <Link
+                        href={`/programs/${programSlug}`}
+                        className="font-heading text-2xl font-bold text-balance md:text-3xl hover:text-primary transition-colors inline-block"
+                      >
+                        {program.title}
+                      </Link>
+                      {program.tagline && (
+                        <p className="mt-1 text-xs font-mono text-primary font-semibold">
+                          {program.tagline}
+                        </p>
+                      )}
                     </div>
-                  ) : (
-                    program.number === '03' && (
-                      <div className="relative mt-8 aspect-[16/8] overflow-hidden border border-border">
+
+                    <p className="leading-relaxed text-muted-foreground text-sm whitespace-pre-wrap">
+                      {program.description}
+                    </p>
+
+                    {/* Image Cover Preview */}
+                    {program.imageUrl && (
+                      <Link
+                        href={`/programs/${programSlug}`}
+                        className="relative block aspect-[16/8] overflow-hidden border border-border group-hover:border-primary/40 transition-colors"
+                      >
                         <Image
-                          src="/images/sdg-team.jpg"
-                          alt="Skillistan team with the 17 SDG blocks at a climate awareness event"
+                          src={program.imageUrl}
+                          alt={program.title}
                           fill
                           sizes="(max-width: 768px) 100vw, 672px"
-                          className="object-cover"
+                          className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
                         />
-                      </div>
-                    )
-                  )}
-                </div>
-              </article>
-            ))}
+                      </Link>
+                    )}
+
+                    {/* Explore Program CTA button */}
+                    <div className="pt-2">
+                      <Link
+                        href={`/programs/${programSlug}`}
+                        className="inline-flex items-center gap-2 bg-foreground px-4 py-2.5 text-xs font-bold text-background hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer select-none"
+                      >
+                        Explore Dedicated Program
+                        <ArrowRight className="size-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         )}
       </section>
