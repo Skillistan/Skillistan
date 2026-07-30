@@ -19,7 +19,18 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const { number, title, slug: inputSlug, tagline, overview, outcomes, description, imageUrl } = await request.json();
+    const {
+      number,
+      title,
+      slug: inputSlug,
+      logoUrl,
+      tagline,
+      overview,
+      outcomes,
+      description,
+      imageUrl,
+      eventIds,
+    } = await request.json();
 
     if (!number || !title || !description) {
       return NextResponse.json(
@@ -28,7 +39,7 @@ export async function PUT(
       );
     }
 
-    const generatedSlug = (inputSlug && inputSlug.trim() !== "") ? slugify(inputSlug) : slugify(title);
+    const generatedSlug = inputSlug && inputSlug.trim() !== "" ? slugify(inputSlug) : slugify(title);
 
     // Check slug uniqueness against other programs
     const existing = await db.program.findFirst({
@@ -51,6 +62,7 @@ export async function PUT(
         number,
         title,
         slug: generatedSlug,
+        logoUrl: logoUrl !== undefined ? logoUrl : undefined,
         tagline: tagline || null,
         overview: overview || null,
         outcomes: outcomes || null,
@@ -58,6 +70,23 @@ export async function PUT(
         imageUrl: imageUrl !== undefined ? imageUrl : undefined,
       },
     });
+
+    // Sync related events (up to 3)
+    if (Array.isArray(eventIds)) {
+      // Clear previously linked events for this program
+      await db.event.updateMany({
+        where: { programId: id },
+        data: { programId: null },
+      });
+
+      const validEventIds = eventIds.filter((eId) => typeof eId === "string" && eId.trim() !== "").slice(0, 3);
+      if (validEventIds.length > 0) {
+        await db.event.updateMany({
+          where: { id: { in: validEventIds } },
+          data: { programId: id },
+        });
+      }
+    }
 
     return NextResponse.json({ success: true, program: updatedProgram });
   } catch (error) {

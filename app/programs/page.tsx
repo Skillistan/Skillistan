@@ -5,9 +5,9 @@ import { ArrowRight } from 'lucide-react'
 import db from '@/lib/db'
 
 export const metadata: Metadata = {
-  title: 'Programs',
+  title: 'Programs | Skillistan',
   description:
-    'Explore Skillistan programs: youth skills development, digital literacy, climate action, leadership, and community workshops.',
+    'Explore Skillistan programs: AI Skills Hub, Mastering SDGs, Climate Action, CLD Network, COP Delegate Lab, and Corporate Solutions.',
 }
 
 export default async function ProgramsPage() {
@@ -51,12 +51,23 @@ export default async function ProgramsPage() {
                   key={program.id}
                   className="group grid gap-6 border-t border-border py-10 md:grid-cols-[6rem_1fr] md:gap-10 md:py-14 hover:bg-card/40 transition-colors px-2 md:px-4"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="font-heading text-5xl font-bold text-primary/30 md:text-6xl select-none group-hover:text-primary transition-colors"
-                  >
-                    {program.number}
-                  </span>
+                  {/* Dedicated Program Logo Container (Replaces raw 1, 2, 3) */}
+                  <div className="relative size-20 md:size-24 shrink-0 overflow-hidden bg-background border border-border flex items-center justify-center p-3 group-hover:border-primary/50 transition-colors">
+                    {program.logoUrl ? (
+                      <Image
+                        src={program.logoUrl}
+                        alt={program.title}
+                        fill
+                        sizes="96px"
+                        className="object-contain p-2"
+                      />
+                    ) : (
+                      <span className="font-heading text-4xl font-bold text-primary/40 group-hover:text-primary transition-colors select-none">
+                        {program.number}
+                      </span>
+                    )}
+                  </div>
+
                   <div className="max-w-3xl space-y-4">
                     <div>
                       <Link

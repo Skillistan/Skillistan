@@ -40,6 +40,7 @@ model Program {
   number      String   // e.g. "01", "02"
   title       String
   slug        String   @unique @default(uuid())
+  logoUrl     String?  @map("logo_url") // optional program logo icon
   tagline     String?
   overview    String?  @db.Text
   outcomes    String?  @db.Text

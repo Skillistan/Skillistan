@@ -17,6 +17,11 @@ export async function GET() {
   try {
     const programs = await db.program.findMany({
       orderBy: { number: "asc" },
+      include: {
+        events: {
+          select: { id: true, title: true, slug: true, eventDate: true, location: true },
+        },
+      },
     });
     return NextResponse.json(programs);
   } catch (error) {
@@ -30,7 +35,18 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { number, title, slug: inputSlug, tagline, overview, outcomes, description, imageUrl } = await request.json();
+    const {
+      number,
+      title,
+      slug: inputSlug,
+      logoUrl,
+      tagline,
+      overview,
+      outcomes,
+      description,
+      imageUrl,
+      eventIds,
+    } = await request.json();
 
     if (!number || !title || !description) {
       return NextResponse.json(
@@ -39,7 +55,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const generatedSlug = (inputSlug && inputSlug.trim() !== "") ? slugify(inputSlug) : slugify(title);
+    const generatedSlug = inputSlug && inputSlug.trim() !== "" ? slugify(inputSlug) : slugify(title);
 
     // Check slug uniqueness
     const existing = await db.program.findFirst({
@@ -58,6 +74,7 @@ export async function POST(request: Request) {
         number,
         title,
         slug: generatedSlug,
+        logoUrl: logoUrl || null,
         tagline: tagline || null,
         overview: overview || null,
         outcomes: outcomes || null,
@@ -65,6 +82,17 @@ export async function POST(request: Request) {
         imageUrl: imageUrl || null,
       },
     });
+
+    // Link up to 3 selected events
+    if (Array.isArray(eventIds) && eventIds.length > 0) {
+      const validEventIds = eventIds.filter((id) => typeof id === "string" && id.trim() !== "").slice(0, 3);
+      if (validEventIds.length > 0) {
+        await db.event.updateMany({
+          where: { id: { in: validEventIds } },
+          data: { programId: program.id },
+        });
+      }
+    }
 
     return NextResponse.json(
       { success: true, program },

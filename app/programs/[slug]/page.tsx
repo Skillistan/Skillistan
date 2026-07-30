@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProgramDetailPage({ params }: Props) {
   const { slug } = await params
 
-  // Find program by slug or number
+  // Find program by slug or number and include linked events (up to 3)
   const program = await db.program.findFirst({
     where: {
       OR: [{ slug: slug }, { number: slug }],
@@ -40,6 +40,7 @@ export default async function ProgramDetailPage({ params }: Props) {
       events: {
         where: { status: 'published' },
         orderBy: { eventDate: 'desc' },
+        take: 3,
       },
     },
   })
@@ -48,7 +49,7 @@ export default async function ProgramDetailPage({ params }: Props) {
     notFound()
   }
 
-  // Fetch recent stories for the sidebar / related section
+  // Fetch recent stories for the sidebar
   const stories = await db.story.findMany({
     where: { status: 'published' },
     orderBy: { publishedAt: 'desc' },
@@ -66,7 +67,7 @@ export default async function ProgramDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6 md:pt-14 md:pb-24 space-y-12">
-      {/* Back button */}
+      {/* Back link */}
       <div>
         <Link
           href="/programs"
@@ -81,21 +82,39 @@ export default async function ProgramDetailPage({ params }: Props) {
       <div className="grid gap-12 md:grid-cols-[1fr_340px] items-start">
         {/* Left Column: Core Program Details */}
         <div className="space-y-10">
-          {/* Header */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="font-heading text-4xl md:text-5xl font-bold text-primary">
-                {program.number}
-              </span>
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground border-l border-border pl-3 py-1">
-                Skillistan Core Program
-              </span>
+          {/* Header with Dedicated Logo */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              {/* Dedicated Logo */}
+              <div className="relative size-16 md:size-20 shrink-0 overflow-hidden bg-background border border-border flex items-center justify-center p-2">
+                {program.logoUrl ? (
+                  <Image
+                    src={program.logoUrl}
+                    alt={program.title}
+                    fill
+                    priority
+                    sizes="80px"
+                    className="object-contain p-1"
+                  />
+                ) : (
+                  <span className="font-heading text-3xl font-bold text-primary">
+                    {program.number}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-primary">
+                  Skillistan Core Program #{program.number}
+                </span>
+                <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground md:text-5xl mt-1">
+                  {program.title}
+                </h1>
+              </div>
             </div>
-            <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground md:text-5xl">
-              {program.title}
-            </h1>
+
             {program.tagline && (
-              <p className="text-base leading-relaxed text-primary font-medium">
+              <p className="text-base leading-relaxed text-foreground font-medium border-l-2 border-primary pl-4 py-1">
                 {program.tagline}
               </p>
             )}
@@ -146,12 +165,12 @@ export default async function ProgramDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Associated Events & Bootcamps */}
+          {/* Associated Events & Bootcamps (Up to 3 selected) */}
           <div className="space-y-6 border-t border-border pt-8">
             <div className="flex items-center justify-between">
               <h2 className="font-heading text-xl font-bold tracking-tight flex items-center gap-2">
                 <Calendar className="size-4 text-primary" />
-                Associated Bootcamps & Events
+                Related Bootcamps & Events
               </h2>
               <Link
                 href="/events"
@@ -165,30 +184,32 @@ export default async function ProgramDetailPage({ params }: Props) {
             {program.events.length === 0 ? (
               <div className="border border-dashed border-border bg-card/45 p-8 text-center">
                 <p className="font-heading text-sm font-bold">
-                  No dedicated events scheduled right now
+                  No linked events scheduled right now
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Check back soon or explore our main events directory.
                 </p>
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-3">
                 {program.events.map((ev) => (
                   <Link
                     key={ev.id}
                     href={`/events/${ev.slug}`}
-                    className="group border border-border bg-card p-4 space-y-2 hover:border-primary/40 transition-colors"
+                    className="group border border-border bg-card p-4 space-y-2 hover:border-primary/40 transition-colors flex flex-col justify-between"
                   >
-                    <div className="flex items-center justify-between text-[10px] text-muted-foreground font-mono">
-                      <span>{formatDate(ev.eventDate)}</span>
-                      <span>{ev.location || 'Online'}</span>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-[10px] text-muted-foreground font-mono">
+                        <span>{formatDate(ev.eventDate)}</span>
+                      </div>
+                      <h3 className="font-heading text-sm font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                        {ev.title}
+                      </h3>
                     </div>
-                    <h3 className="font-heading text-sm font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                      {ev.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {ev.description}
-                    </p>
+                    <div className="text-[11px] text-primary font-medium flex items-center gap-1 pt-2">
+                      View details
+                      <ArrowRight className="size-3" />
+                    </div>
                   </Link>
                 ))}
               </div>

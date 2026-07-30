@@ -169,77 +169,88 @@ async function main() {
   }
 
   // 4. Seed Programs
-  console.log("Seeding sample programs...");
+  console.log("Clearing existing programs and seeding new programs with dedicated logos...");
+  await prisma.program.deleteMany({});
+
   const samplePrograms = [
     {
       number: "01",
-      slug: "youth-skills-development",
-      title: "Youth Skills Development",
-      tagline: "Practical, employment-focused training bridging classrooms and modern careers.",
-      overview: "Our Youth Skills Development program equips young people across Pakistan with high-demand digital skills, professional communication techniques, and freelance readiness. Designed for immediate impact, participants undergo rigorous hands-on modules focusing on profile creation, client management, and practical work portfolios.",
-      outcomes: "1. Complete Upwork & Freelance Profile Readiness\n2. Professional Work Portfolio Creation\n3. Client Communication & Negotiation\n4. 90-Day Livelihood Action Plan",
-      description: "Practical, employment-focused training that helps young people move from classrooms into real work: communication, freelancing fundamentals, and professional readiness.",
+      slug: "ai-skills-hub",
+      title: "AI Skills Hub",
+      logoUrl: "/images/logos/ai-skills-hub.png",
+      tagline: "Empowering youth with cutting-edge artificial intelligence, prompt engineering, and modern automation tools.",
+      overview: "The AI Skills Hub bridges the gap between emerging technology and real-world career application. Designed for students, freelancers, and young professionals, this program provides hands-on mastery over Generative AI, automated workflows, LLM prompting, and AI-driven content and software development.",
+      outcomes: "1. Generative AI & Prompt Engineering Mastery\n2. AI-Driven Workflow Automation & Productivity\n3. Portfolio of Practical AI Projects\n4. Freelance & Corporate AI Skill Readiness",
+      description: "Hands-on AI training covering prompt engineering, workflow automation, and practical AI tools for students and young professionals.",
       imageUrl: "/images/group-photo.jpg",
     },
     {
       number: "02",
-      slug: "digital-literacy",
-      title: "Digital Literacy",
-      tagline: "Essential digital foundations for the modern economy.",
-      overview: "In an increasingly digital world, access and foundational knowledge are essential. Our Digital Literacy program delivers hands-on bootcamps covering cloud tools, internet safety, digital productivity, and basic web navigation for university students and community youth.",
-      outcomes: "1. Proficiency in Modern Workspace Tools\n2. Online Safety & Cybersecurity Basics\n3. Digital Information Management\n4. Collaborative Remote Tools Mastery",
-      description: "Hands-on digital foundations for students and young professionals: online tools, digital safety, and the skills needed to participate in the modern economy.",
-      imageUrl: "/images/lcoy-award.jpg",
-    },
-    {
-      number: "03",
-      slug: "climate-action-sustainability",
-      title: "Climate Action & Sustainability",
-      tagline: "Putting young voices at the center of regional climate leadership.",
-      overview: "From co-organizing LCOY conferences in Khyber Pakhtunkhwa to localized eco-drives and sustainability workshops, this program empowers youth to champion UN Sustainable Development Goals (SDGs) and lead local environmental initiatives.",
-      outcomes: "1. LCOY Framework & Policy Advocacy\n2. Community Tree Planting & Waste Drives\n3. Local SDG Project Execution\n4. Environmental Campaign Mentorship",
-      description: "From LCOY conferences to community campaigns, we put young voices at the center of climate conversations in Khyber Pakhtunkhwa and beyond.",
+      slug: "mastering-sdgs-17-tribes",
+      title: "Mastering SDGs & 17 Tribes",
+      tagline: "Localized framework for driving UN Sustainable Development Goals across Pakistani communities.",
+      overview: "Mastering SDGs is a youth engagement program that transforms global sustainability goals into actionable local projects. Organised around '17 Tribes' representing each SDG, participants design, implement, and track community impact projects in education, clean energy, and gender equity.",
+      outcomes: "1. UN SDG Policy & Action Framework Knowledge\n2. Execution of Local Community Impact Projects\n3. Inter-tribal Youth Collaboration & Networks\n4. Certificate of Sustainable Development Leadership",
+      description: "Action-oriented program engaging youth across 17 SDG action tribes to solve localized community challenges.",
       imageUrl: "/images/sdg-team.jpg",
     },
     {
+      number: "03",
+      slug: "climate-cafe-action",
+      title: "Climate Cafe & Action",
+      tagline: "Inclusive dialogue platforms and local environmental action drives.",
+      overview: "Climate Cafe creates informal, engaging spaces for young advocates, climate scientists, and community leaders to discuss regional climate challenges in Khyber Pakhtunkhwa and Pakistan. Sessions lead directly into tree-planting, waste reduction, and clean energy advocacy campaigns.",
+      outcomes: "1. Community Climate Advocacy & Dialogue Moderation\n2. Organising Local Tree Planting & Eco Drives\n3. LCOY Framework Contribution\n4. Regional Environmental Youth Network",
+      description: "Interactive youth platform combining constructive climate dialogues with hands-on environmental conservation drives.",
+      imageUrl: "/images/lcoy-award.jpg",
+    },
+    {
       number: "04",
-      slug: "youth-leadership",
-      title: "Youth Leadership",
-      tagline: "Turning participants into confident community changemakers.",
-      overview: "Structured opportunities for young leaders to organize campaigns, moderate events, and make key decisions. Participants develop public speaking, team management, and strategic organizing skills through active community leadership roles.",
-      outcomes: "1. Public Speaking & Workshop Moderation\n2. Team & Event Management Experience\n3. Strategic Community Campaigning\n4. Alumni Leadership Network Access",
-      description: "Structured opportunities for young people to organize, speak, and lead: building the confidence and networks that turn participants into changemakers.",
+      slug: "cld-network-leadership",
+      title: "CLD Network & Leadership",
+      tagline: "Building community-led development leaders for regional transformation.",
+      overview: "The Climate Leadership & Development (CLD) Network trains youth to organize, speak, and lead in their institutions. Participants learn strategic campaign management, public speaking, policy drafting, and volunteer team building.",
+      outcomes: "1. Campaign Management & Public Speaking\n2. Organising University & Community Chapters\n3. Policy Drafting & Youth Advocacy\n4. Direct Alumni Network Access",
+      description: "Structured leadership track cultivating confident community organizers, facilitators, and youth ambassadors.",
       imageUrl: "/images/plant-gift.jpg",
     },
     {
       number: "05",
-      slug: "workshops-community-programs",
-      title: "Workshops & Community Programs",
-      tagline: "Accessible, localized sessions delivered in schools and communities.",
-      overview: "Short, highly focused workshops delivered in partnership with educational institutions, community centers, and local partner organizations across Pakistan. Designed to be accessible, immediate, and culturally resonant.",
-      outcomes: "1. On-Campus Interactive Training\n2. Localized Vocational Insights\n3. Peer-to-Peer Knowledge Sharing\n4. Direct Volunteer Mentorship",
-      description: "Short, focused sessions delivered with schools, universities, and partners: designed to be accessible, local, and immediately useful.",
+      slug: "cop-delegate-lab",
+      title: "COP Delegate Lab",
+      tagline: "Preparing Pakistani youth advocates for international climate diplomacy and COP conferences.",
+      overview: "COP Delegate Lab offers intensive training on international climate negotiations, loss and damage frameworks, UNFCCC policy drafting, and youth constituency representation. Designed to elevate Pakistani youth voices on global stages.",
+      outcomes: "1. International Climate Negotiation & UNFCCC Literacy\n2. Policy Position Paper Drafting\n3. Mock COP Conference Simulations\n4. Global Youth Delegate Mentorship",
+      description: "Specialized advocacy incubator preparing emerging leaders for COP conferences and global climate diplomacy.",
       imageUrl: "/images/lcoy-certificate.jpg",
+    },
+    {
+      number: "06",
+      slug: "summer-internship-program",
+      title: "Skillistan Summer Internship",
+      tagline: "Immersive 8-week experiential internship across digital operations, research, and community management.",
+      overview: "Our flagship Summer Internship Program provides university students and recent graduates with real project responsibility. Interns work alongside senior leadership in event production, content creation, partner outreach, and digital strategy.",
+      outcomes: "1. Real-World Project Execution Experience\n2. Direct Mentorship from Senior Leaders\n3. Professional CV & Portfolio Enhancement\n4. Priority Hiring & Recommendation Letters",
+      description: "8-week intensive internship experience building practical skills in project management, communications, and digital strategy.",
+      imageUrl: "/images/group-photo.jpg",
+    },
+    {
+      number: "07",
+      slug: "corporate-solutions",
+      title: "Corporate Solutions & Capacity Building",
+      tagline: "Tailored workforce upskilling and corporate social responsibility partnerships.",
+      overview: "Corporate Solutions partners with enterprises, NGOs, and educational institutions to deliver customized digital upskilling, ESG frameworks, and youth employment pipelines across Pakistan.",
+      outcomes: "1. Tailored Vocational & Digital Upskilling Modules\n2. Enterprise ESG & CSR Impact Reporting\n3. Industry-Ready Talent Placement Pipelines\n4. Executive Workshop Facilitation",
+      description: "Customized corporate training, ESG engagement programs, and talent development partnerships for organizations.",
+      imageUrl: "/images/sdg-team.jpg",
     },
   ];
 
   for (const prog of samplePrograms) {
-    const existing = await prisma.program.findFirst({
-      where: { number: prog.number },
+    await prisma.program.create({
+      data: prog,
     });
-
-    if (!existing) {
-      await prisma.program.create({
-        data: prog,
-      });
-      console.log(`Created sample program: ${prog.title} (${prog.number})`);
-    } else {
-      await prisma.program.update({
-        where: { id: existing.id },
-        data: prog,
-      });
-      console.log(`Updated sample program: ${prog.title} (${prog.number})`);
-    }
+    console.log(`Created new program: ${prog.title} (${prog.number})`);
   }
 
   // 5. Seed Stories
