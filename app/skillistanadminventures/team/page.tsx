@@ -21,6 +21,8 @@ type TeamMember = {
   imageUrl: string | null;
   linkedinUrl: string | null;
   order: number;
+  startDate: string | null;
+  endDate: string | null;
 };
 
 export default function AdminTeamPage() {
@@ -37,12 +39,15 @@ export default function AdminTeamPage() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [order, setOrder] = useState(0);
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
   // Action feedback states
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertError, setAlertError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Custom delete confirmation modal states
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -76,7 +81,10 @@ export default function AdminTeamPage() {
     setImageUrl(null);
     setLinkedinUrl("");
     setOrder(members.length + 1); // Suggest next order
+    setStartDate('');
+    setEndDate('');
     setAlertError(null);
+    setUploadError(null);
     setFormOpen(true);
   };
 
@@ -89,7 +97,11 @@ export default function AdminTeamPage() {
     setImageUrl(member.imageUrl);
     setLinkedinUrl(member.linkedinUrl || "");
     setOrder(member.order);
+    // Format ISO date string to YYYY-MM-DD for date input
+    setStartDate(member.startDate ? member.startDate.split('T')[0] : '');
+    setEndDate(member.endDate ? member.endDate.split('T')[0] : '');
     setAlertError(null);
+    setUploadError(null);
     setFormOpen(true);
   };
 
@@ -106,20 +118,28 @@ export default function AdminTeamPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Clear any previous upload error
+    setUploadError(null);
+
     // Frontend validation: Size limit (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setAlertError("Image file size must be under 5MB.");
+      setUploadError("Image file size must be under 5MB. Please select a smaller image.");
       return;
     }
 
     // Frontend validation: File type
     if (!file.type.startsWith("image/")) {
-      setAlertError("Please select a valid image file (PNG, JPG, WEBP).");
+      setUploadError("Invalid file type. Please select a valid image (PNG, JPG, or WEBP).");
       return;
     }
 
+    // Frontend validation: Recommended dimensions hint for very small files
+    if (file.size < 5 * 1024) {
+      setUploadError("This image may be too small for a quality headshot. Recommended minimum: 200x200px.");
+      // Don't return - still allow upload, just show warning
+    }
+
     setUploading(true);
-    setAlertError(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -134,10 +154,11 @@ export default function AdminTeamPage() {
       if (!res.ok) throw new Error(data.error || "Upload failed.");
 
       setImageUrl(data.imageUrl);
+      setUploadError(null);
       setAlertMessage("Image uploaded successfully.");
       setTimeout(() => setAlertMessage(null), 3000);
     } catch (err: any) {
-      setAlertError(err.message || "Failed to upload image.");
+      setUploadError(err.message || "Failed to upload image. Please try again.");
     } finally {
       setUploading(false);
     }
@@ -147,6 +168,18 @@ export default function AdminTeamPage() {
     e.preventDefault();
     setSubmitting(true);
     setAlertError(null);
+
+    if (!startDate) {
+      setAlertError('Start date is required.');
+      setSubmitting(false);
+      return;
+    }
+
+    if (endDate && new Date(endDate) < new Date(startDate)) {
+      setAlertError('End date must be after start date.');
+      setSubmitting(false);
+      return;
+    }
 
     // Frontend validation
     if (!name.trim() || !role.trim() || !category) {
@@ -195,6 +228,8 @@ export default function AdminTeamPage() {
       imageUrl,
       linkedinUrl: cleanLinkedin || null,
       order: Number(order) || 0,
+      startDate: startDate || null,
+      endDate: endDate || null,
     };
 
     try {
@@ -255,6 +290,18 @@ export default function AdminTeamPage() {
     } finally {
       setDeleting(false);
     }
+  };
+
+  const formatAdminTenure = (start: string | null, end: string | null): string => {
+    if (!start) return '';
+    const s = new Date(start);
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const startStr = `${months[s.getMonth()]} ${s.getFullYear()}`;
+    if (end) {
+      const e = new Date(end);
+      return `${startStr} - ${months[e.getMonth()]} ${e.getFullYear()}`;
+    }
+    return `Since ${startStr}`;
   };
 
   const leadership = members.filter((m) => m.category === "leadership");
@@ -390,6 +437,11 @@ export default function AdminTeamPage() {
                             {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
                           </div>
                           <p className="text-xs font-semibold text-primary uppercase tracking-wider mt-0.5">{member.role}</p>
+                          {member.startDate && (
+                            <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                              {formatAdminTenure(member.startDate, member.endDate)}
+                            </p>
+                          )}
                           <p className="text-xs text-muted-foreground mt-0.5 font-medium">Sort Order: {member.order}</p>
                         </div>
                       </div>
@@ -459,6 +511,11 @@ export default function AdminTeamPage() {
                         {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
                       </div>
                       <p className="text-xs text-primary font-semibold mt-0.5">{member.role}</p>
+                      {member.startDate && (
+                        <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                          {formatAdminTenure(member.startDate, member.endDate)}
+                        </p>
+                      )}
                       <p className="text-[10px] bg-muted/60 text-muted-foreground px-1.5 py-0.5 rounded-full mt-1.5">
                         Order: {member.order}
                       </p>
@@ -526,6 +583,11 @@ export default function AdminTeamPage() {
                         {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
                       </div>
                       <p className="text-[10px] text-muted-foreground mt-0.5">{member.role}</p>
+                      {member.startDate && (
+                        <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                          {formatAdminTenure(member.startDate, member.endDate)}
+                        </p>
+                      )}
                       {member.bio && (
                         <p className="text-[10px] text-muted-foreground leading-relaxed mt-2 bg-muted/30 p-1.5 border-l border-primary/40 w-full text-left">
                           {member.bio}
@@ -653,6 +715,41 @@ export default function AdminTeamPage() {
                 </div>
               </div>
 
+              {/* Tenure Dates */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="startDate" className="text-sm font-medium">
+                    Start Date <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    id="startDate"
+                    type="date"
+                    required
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full border border-input bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <p className="text-[10px] text-muted-foreground">
+                    When they joined or started their tenure.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="endDate" className="text-sm font-medium">
+                    End Date
+                  </label>
+                  <input
+                    id="endDate"
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full border border-input bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <p className="text-[10px] text-muted-foreground">
+                    Leave empty if currently active.
+                  </p>
+                </div>
+              </div>
+
               {/* Bio (optional, dynamic limit) */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-center">
@@ -751,6 +848,18 @@ export default function AdminTeamPage() {
                     )}
                   </div>
                 </div>
+                {/* Inline Upload Validation Feedback */}
+                {uploadError && (
+                  <div className="mt-2 flex items-start gap-2 border border-destructive/30 bg-destructive/5 px-3 py-2.5">
+                    <svg className="size-4 text-destructive shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                    </svg>
+                    <div>
+                      <p className="text-xs font-semibold text-destructive">{uploadError}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Accepted: PNG, JPG, WEBP. Max size: 5MB.</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Form Actions */}

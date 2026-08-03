@@ -7,7 +7,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const { name, role, category, bio, imageUrl, linkedinUrl, order } = await request.json();
+    const { name, role, category, bio, imageUrl, linkedinUrl, order, startDate, endDate } = await request.json();
 
     if (!name || !role || !category) {
       return NextResponse.json(
@@ -25,6 +25,8 @@ export async function PUT(
         bio,
         imageUrl,
         linkedinUrl: linkedinUrl || null,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
         order: typeof order === "number" ? order : 0,
       },
     });
