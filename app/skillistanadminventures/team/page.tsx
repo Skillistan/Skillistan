@@ -194,8 +194,8 @@ export default function AdminTeamPage() {
       return;
     }
 
-    if (role.length > 50) {
-      setAlertError("Role cannot exceed 50 characters.");
+    if (role.length > 100) {
+      setAlertError("Role Title cannot exceed 100 characters.");
       setSubmitting(false);
       return;
     }
@@ -203,7 +203,7 @@ export default function AdminTeamPage() {
     // Dynamic bio validation check
     const maxBioLength = category === "leadership" ? 250 : category === "employee" ? 200 : 100;
     if (bio.length > maxBioLength) {
-      setAlertError(`Biography cannot exceed ${maxBioLength} characters for ${category === "leadership" ? "Senior Management" : category === "employee" ? "Staff & Trainers" : "Internees"}.`);
+      setAlertError(`Personal Statement / Vision cannot exceed ${maxBioLength} characters for ${category === "leadership" ? "Senior Management" : category === "employee" ? "Staff & Trainers" : "Internees"}.`);
       setSubmitting(false);
       return;
     }
@@ -490,54 +490,58 @@ export default function AdminTeamPage() {
                 {employees.map((member) => (
                   <div
                     key={member.id}
-                    className="w-full sm:w-[calc(50%-0.75rem)] md:w-[calc(25%-1.15rem)] max-w-[260px] border border-border bg-card p-4 flex flex-col justify-between transition-transform duration-300 hover:shadow-sm"
+                    className="w-full sm:w-[calc(50%-0.75rem)] md:w-[calc(33.33%-1rem)] max-w-sm border border-border bg-card p-5 flex flex-col justify-between transition-transform duration-300 hover:shadow-sm"
                   >
-                    <div className="flex flex-col items-center text-center w-full">
-                      <div className="relative h-20 w-20 overflow-hidden rounded-full border border-border bg-muted mb-3 shrink-0">
-                        {member.imageUrl ? (
-                          <Image
-                            src={member.imageUrl}
-                            alt={member.name}
-                            fill
-                            sizes="80px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <InitialsAvatar name={member.name} className="h-full w-full" />
-                        )}
+                    <div>
+                      <div className="flex gap-4 items-start">
+                        <div className="relative h-16 w-16 overflow-hidden rounded-full border border-border bg-muted shrink-0">
+                          {member.imageUrl ? (
+                            <Image
+                              src={member.imageUrl}
+                              alt={member.name}
+                              fill
+                              sizes="64px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <InitialsAvatar name={member.name} className="h-full w-full" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h4 className="font-heading font-bold text-base text-foreground">{member.name}</h4>
+                            {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
+                          </div>
+                          <p className="text-xs font-semibold text-primary uppercase tracking-wider mt-0.5">{member.role}</p>
+                          {member.startDate && (
+                            <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                              {formatAdminTenure(member.startDate, member.endDate)}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground mt-0.5 font-medium">Sort Order: {member.order}</p>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-center gap-1.5 flex-wrap">
-                        <h4 className="font-heading font-bold text-sm text-foreground">{member.name}</h4>
-                        {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
-                      </div>
-                      <p className="text-xs text-primary font-semibold mt-0.5">{member.role}</p>
-                      {member.startDate && (
-                        <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
-                          {formatAdminTenure(member.startDate, member.endDate)}
-                        </p>
-                      )}
-                      <p className="text-[10px] bg-muted/60 text-muted-foreground px-1.5 py-0.5 rounded-full mt-1.5">
-                        Order: {member.order}
-                      </p>
                       {member.bio && (
-                        <p className="text-xs text-muted-foreground leading-relaxed mt-3 bg-muted/30 p-2 border-l-2 border-primary/40 w-full text-left">
+                        <p className="text-xs text-muted-foreground leading-relaxed mt-4 bg-muted/30 p-2.5 border-l-2 border-primary/40 w-full text-left">
                           {member.bio}
                         </p>
                       )}
                     </div>
-                    <div className="mt-4 pt-3 border-t border-border flex justify-center gap-4">
+                    <div className="mt-5 pt-3 border-t border-border flex justify-end gap-2.5">
                       <button
                         onClick={() => handleOpenEdit(member)}
-                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors p-1"
+                        aria-label={`Edit ${member.name}`}
                       >
-                        <Pencil size={12} />
+                        <Pencil size={13} />
                         Edit
                       </button>
                       <button
                         onClick={() => triggerDeleteConfirm(member)}
-                        className="flex items-center gap-1.5 text-xs text-destructive hover:bg-destructive/5 transition-colors"
+                        className="flex items-center gap-1.5 text-xs text-destructive hover:bg-destructive/5 transition-colors p-1"
+                        aria-label={`Delete ${member.name}`}
                       >
-                        <Trash2 size={12} />
+                        <Trash2 size={13} />
                         Delete
                       </button>
                     </div>
@@ -562,52 +566,59 @@ export default function AdminTeamPage() {
                 {interns.map((member) => (
                   <div
                     key={member.id}
-                    className="w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(20%-0.8rem)] max-w-[180px] border border-border bg-card p-3 flex flex-col justify-between transition-transform duration-300 hover:shadow-sm"
+                    className="w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.33%-0.75rem)] max-w-sm border border-border bg-card p-4 flex flex-col justify-between transition-transform duration-300 hover:shadow-sm"
                   >
-                    <div className="flex flex-col items-center text-center w-full">
-                      <div className="relative h-14 w-14 overflow-hidden rounded-full border border-border bg-muted mb-2 shrink-0">
-                        {member.imageUrl ? (
-                          <Image
-                            src={member.imageUrl}
-                            alt={member.name}
-                            fill
-                            sizes="56px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <InitialsAvatar name={member.name} className="h-full w-full text-xs" />
-                        )}
+                    <div>
+                      <div className="flex gap-3 items-start">
+                        <div className="relative h-12 w-12 overflow-hidden rounded-full border border-border bg-muted shrink-0">
+                          {member.imageUrl ? (
+                            <Image
+                              src={member.imageUrl}
+                              alt={member.name}
+                              fill
+                              sizes="48px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <InitialsAvatar name={member.name} className="h-full w-full text-xs" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h4 className="font-heading font-bold text-sm text-foreground">{member.name}</h4>
+                            {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
+                          </div>
+                          <p className="text-xs text-primary font-medium mt-0.5">{member.role}</p>
+                          {member.startDate && (
+                            <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                              {formatAdminTenure(member.startDate, member.endDate)}
+                            </p>
+                          )}
+                          <p className="text-[10px] text-muted-foreground mt-0.5 font-medium">Sort Order: {member.order}</p>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-center gap-1 flex-wrap">
-                        <h4 className="font-heading font-semibold text-xs text-foreground">{member.name}</h4>
-                        {member.linkedinUrl && <LinkedInPreview href={member.linkedinUrl} />}
-                      </div>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{member.role}</p>
-                      {member.startDate && (
-                        <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
-                          {formatAdminTenure(member.startDate, member.endDate)}
-                        </p>
-                      )}
                       {member.bio && (
-                        <p className="text-[10px] text-muted-foreground leading-relaxed mt-2 bg-muted/30 p-1.5 border-l border-primary/40 w-full text-left">
+                        <p className="text-xs text-muted-foreground leading-relaxed mt-3 bg-muted/30 p-2 border-l-2 border-primary/40 w-full text-left">
                           {member.bio}
                         </p>
                       )}
                     </div>
-                    <div className="mt-3 pt-2 border-t border-border flex justify-around">
+                    <div className="mt-4 pt-2.5 border-t border-border flex justify-end gap-2.5">
                       <button
                         onClick={() => handleOpenEdit(member)}
-                        className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                        title="Edit member"
+                        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors p-1"
+                        aria-label={`Edit ${member.name}`}
                       >
-                        <Pencil size={11} />
+                        <Pencil size={12} />
+                        Edit
                       </button>
                       <button
                         onClick={() => triggerDeleteConfirm(member)}
-                        className="text-destructive hover:bg-destructive/5 transition-colors p-1"
-                        title="Delete member"
+                        className="flex items-center gap-1 text-xs text-destructive hover:bg-destructive/5 transition-colors p-1"
+                        aria-label={`Delete ${member.name}`}
                       >
-                        <Trash2 size={11} />
+                        <Trash2 size={12} />
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -667,15 +678,15 @@ export default function AdminTeamPage() {
                   id="role"
                   type="text"
                   required
-                  maxLength={50}
+                  maxLength={100}
                   placeholder="e.g. Founder & Director"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   className="w-full border border-input bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <div className="flex justify-between text-[11px] mt-0.5">
-                  <span className={role.length > 45 ? "text-destructive font-medium" : "text-muted-foreground"}>
-                    {role.length}/50 characters
+                  <span className={role.length > 90 ? "text-destructive font-medium" : "text-muted-foreground"}>
+                    {role.length}/100 characters
                   </span>
                 </div>
               </div>
@@ -750,11 +761,11 @@ export default function AdminTeamPage() {
                 </div>
               </div>
 
-              {/* Bio (optional, dynamic limit) */}
+              {/* Personal Statement / Vision (optional, dynamic limit) */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-center">
                   <label htmlFor="bio" className="text-sm font-medium">
-                    Biography (Brief description)
+                    Personal Statement / Vision
                   </label>
                   <span className="text-[10px] text-primary bg-primary/5 px-2 py-0.5 font-medium rounded-full">
                     {category === "leadership" ? "250 chars max" : category === "employee" ? "200 chars max" : "100 chars max"}
@@ -764,7 +775,7 @@ export default function AdminTeamPage() {
                   id="bio"
                   rows={3}
                   maxLength={maxBioLength}
-                  placeholder="Short background description..."
+                  placeholder='e.g. "Empowering youth to turn potential into progress and real-world impact."'
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   className="w-full border border-input bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"

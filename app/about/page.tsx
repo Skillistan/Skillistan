@@ -216,7 +216,7 @@ export default async function AboutPage() {
                     const tenure = formatTenure(member.startDate, member.endDate)
                     return (
                       <div key={member.id} className="group border border-border bg-card overflow-hidden transition-all duration-300 hover:border-foreground/40 hover:shadow-lg">
-                        <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                        <div className="relative aspect-square overflow-hidden bg-muted">
                           {member.imageUrl ? (
                             <Image
                               src={member.imageUrl}
@@ -226,7 +226,7 @@ export default async function AboutPage() {
                               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                             />
                           ) : (
-                            <InitialsAvatar name={member.name} className="w-full h-full text-3xl" />
+                            <InitialsAvatar name={member.name} className="w-full h-full text-4xl" />
                           )}
                           {member.linkedinUrl && (
                             <a
@@ -254,8 +254,8 @@ export default async function AboutPage() {
                             </div>
                           )}
                           {member.bio && (
-                            <p className="text-sm leading-relaxed text-muted-foreground border-t border-border/60 pt-3 mt-3">
-                              {member.bio}
+                            <p className="text-xs leading-relaxed text-muted-foreground border-t border-border/60 pt-3 mt-3 italic">
+                              &ldquo;{member.bio}&rdquo;
                             </p>
                           )}
                         </div>
@@ -278,7 +278,7 @@ export default async function AboutPage() {
                     const tenure = formatTenure(member.startDate, member.endDate)
                     return (
                       <div key={member.id} className="group border border-border bg-card overflow-hidden transition-all duration-300 hover:border-foreground/40 hover:shadow-lg">
-                        <div className="relative aspect-[5/4] overflow-hidden bg-muted">
+                        <div className="relative aspect-square overflow-hidden bg-muted">
                           {member.imageUrl ? (
                             <Image
                               src={member.imageUrl}
@@ -313,8 +313,8 @@ export default async function AboutPage() {
                             </p>
                           )}
                           {member.bio && (
-                            <p className="text-xs leading-relaxed text-muted-foreground border-t border-border/50 pt-2.5 mt-2.5">
-                              {member.bio}
+                            <p className="text-xs leading-relaxed text-muted-foreground border-t border-border/50 pt-2.5 mt-2.5 italic">
+                              &ldquo;{member.bio}&rdquo;
                             </p>
                           )}
                         </div>
@@ -374,8 +374,8 @@ export default async function AboutPage() {
                             </p>
                           )}
                           {member.bio && (
-                            <p className="text-[11px] leading-relaxed text-muted-foreground mt-2 border-t border-border/50 pt-2">
-                              {member.bio}
+                            <p className="text-[11px] leading-relaxed text-muted-foreground mt-2 border-t border-border/50 pt-2 italic">
+                              &ldquo;{member.bio}&rdquo;
                             </p>
                           )}
                         </div>
